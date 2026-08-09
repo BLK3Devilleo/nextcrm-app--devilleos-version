@@ -483,7 +483,13 @@ Made with [contrib.rocks](https://contrib.rocks).
 
 ## Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=pdovhomilja/nextcrm-app&type=Timeline)](https://star-history.com/#pdovhomilja/nextcrm-app&Timeline)
+<a href="https://www.star-history.com/?type=timeline&repos=pdovhomilja%2Fnextcrm-app">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=pdovhomilja/nextcrm-app&type=timeline&theme=dark&legend=top-left&sealed_token=K4hXRI40If9iqw449EdBDzIuSwzTy862Gd3Z9DHyD2G0rXXE5AtVKWCtzv6OFB8hbw0TKBkWevH-XU9LETwZgkF0AuD3p8_ZxXj4NTuWP5PdeV6C-xjboh2XiRP68ouog-IYwkdXzGmWkI5Vcn82111CbOIX2u8snev61AI_fx8-d0Stlr7ftKsAVWbX" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=pdovhomilja/nextcrm-app&type=timeline&legend=top-left&sealed_token=K4hXRI40If9iqw449EdBDzIuSwzTy862Gd3Z9DHyD2G0rXXE5AtVKWCtzv6OFB8hbw0TKBkWevH-XU9LETwZgkF0AuD3p8_ZxXj4NTuWP5PdeV6C-xjboh2XiRP68ouog-IYwkdXzGmWkI5Vcn82111CbOIX2u8snev61AI_fx8-d0Stlr7ftKsAVWbX" />
+   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=pdovhomilja/nextcrm-app&type=timeline&legend=top-left&sealed_token=K4hXRI40If9iqw449EdBDzIuSwzTy862Gd3Z9DHyD2G0rXXE5AtVKWCtzv6OFB8hbw0TKBkWevH-XU9LETwZgkF0AuD3p8_ZxXj4NTuWP5PdeV6C-xjboh2XiRP68ouog-IYwkdXzGmWkI5Vcn82111CbOIX2u8snev61AI_fx8-d0Stlr7ftKsAVWbX" />
+ </picture>
+</a>
 
 ## License
 
