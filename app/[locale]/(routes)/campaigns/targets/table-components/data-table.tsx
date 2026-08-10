@@ -30,6 +30,7 @@ import { DataTableToolbar } from "./data-table-toolbar";
 import { PanelTopClose, PanelTopOpen, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { BulkEnrichTargetsModal } from "../components/BulkEnrichTargetsModal";
+import ExportTargetsButton from "@/components/campaigns/ExportTargetsButton";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -77,7 +78,20 @@ export function TargetsDataTable<TData, TValue>({
     <div className="space-y-4">
       <div className="flex justify-between items-start gap-3">
         <div></div>
-        <div className="flex justify-end space-x-2">
+        <div className="flex justify-end items-center space-x-2">
+          <ExportTargetsButton
+            getTargets={() => {
+              const selected = table.getSelectedRowModel().rows;
+              const rows =
+                selected.length > 0
+                  ? selected
+                  : table.getFilteredRowModel().rows;
+              return rows.map(
+                (row) => row.original as Record<string, unknown>
+              );
+            }}
+            filenameBase={`targets-${new Date().toISOString().slice(0, 10)}`}
+          />
           {hide ? (
             <PanelTopOpen
               onClick={() => setHide(!hide)}
