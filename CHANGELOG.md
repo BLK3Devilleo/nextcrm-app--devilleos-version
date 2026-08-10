@@ -5,6 +5,28 @@ All notable changes to NextCRM are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.22.0](https://github.com/pdovhomilja/nextcrm-app/compare/v0.21.2...v0.22.0) (2026-08-10)
+
+
+### Added
+
+* add CSV/Excel export to campaign targets table ([36e3299](https://github.com/pdovhomilja/nextcrm-app/commit/36e3299b42f4be267755de4e99d59def3afa0a67))
+* add CSV/Excel export to target list detail page ([b6bb912](https://github.com/pdovhomilja/nextcrm-app/commit/b6bb9123a43419a391fd1d9c697dfd1a28e85531))
+* add CSV/XLSX export utility for targets ([77ca5ae](https://github.com/pdovhomilja/nextcrm-app/commit/77ca5ae7069a74669f62cfbd7ec22942905a986a))
+* CSV/Excel export for campaign targets and target lists ([f1ab4dc](https://github.com/pdovhomilja/nextcrm-app/commit/f1ab4dc684feaeddaad03afefdb0b68fd06c04c1))
+
+
+### Fixed
+
+* map exported 'X / Twitter' header back to social_x in import suggestions ([b457040](https://github.com/pdovhomilja/nextcrm-app/commit/b457040fa16c9ddc632ab71fecadeb67be769d82))
+* **security:** verify TLS certificates on IMAP/SMTP connections ([41e3e6b](https://github.com/pdovhomilja/nextcrm-app/commit/41e3e6bfcebd6055f6345f4f32171b3090395df1))
+* **security:** verify TLS certificates on IMAP/SMTP connections ([327d240](https://github.com/pdovhomilja/nextcrm-app/commit/327d240ab60f5d45e3066f3483e6e4585c7f92ab)), closes [#262](https://github.com/pdovhomilja/nextcrm-app/issues/262)
+
+
+### Changed
+
+* extract TARGET_FIELDS into shared spreadsheet module ([1b98905](https://github.com/pdovhomilja/nextcrm-app/commit/1b98905ae8e455d8da248b314e1b4b387de9e71f))
+
 ## [0.21.2](https://github.com/pdovhomilja/nextcrm-app/compare/v0.21.1...v0.21.2) (2026-08-01)
 
 
