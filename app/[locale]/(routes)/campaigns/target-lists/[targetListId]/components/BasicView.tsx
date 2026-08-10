@@ -17,6 +17,7 @@ import { CalendarDays, Trash2, User, Users } from "lucide-react";
 import moment from "moment";
 import Link from "next/link";
 import AddTargetToListModal from "@/components/modals/AddTargetToListModal";
+import ExportTargetsButton from "@/components/campaigns/ExportTargetsButton";
 
 interface TargetListBasicViewProps {
   data: any;
@@ -106,9 +107,22 @@ export function BasicView({ data }: TargetListBasicViewProps) {
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
             <CardTitle>Targets ({data.targets?.length || 0})</CardTitle>
-            <Button size="sm" variant="outline" onClick={() => setAddOpen(true)}>
-              + Add Target
-            </Button>
+            <div className="flex items-center gap-2">
+              <ExportTargetsButton
+                getTargets={() =>
+                  (data.targets ?? [])
+                    .map((t: any) => t.target)
+                    .filter(Boolean)
+                }
+                filenameBase={`${(data.name || "target-list")
+                  .replace(/[^a-z0-9-_]+/gi, "-")
+                  .toLowerCase()}-targets`}
+                disabled={!data.targets || data.targets.length === 0}
+              />
+              <Button size="sm" variant="outline" onClick={() => setAddOpen(true)}>
+                + Add Target
+              </Button>
+            </div>
           </div>
         </CardHeader>
         <CardContent>

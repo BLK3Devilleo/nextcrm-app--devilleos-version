@@ -60,6 +60,7 @@ function fuzzyMatch(header: string): string | null {
     linkedinurl: "social_linkedin",
     twitter: "social_x",
     x: "social_x",
+    "x/twitter": "social_x",
     instagram: "social_instagram",
     facebook: "social_facebook",
     personalemail: "personal_email",
