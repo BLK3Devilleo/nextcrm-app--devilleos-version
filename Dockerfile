@@ -75,12 +75,13 @@ ENV NODE_ENV=production \
 RUN addgroup --system --gid 1001 nodejs && \
     adduser --system --uid 1001 nextjs
 
-# Install Prisma CLI + tsx + dotenv into /opt/tools to avoid conflicts
+# Install Prisma CLI + tsx + dotenv + sharp into /opt/tools to avoid conflicts
 # with Next.js standalone node_modules (pnpm-symlinked structure).
 # We'll expose these via PATH and NODE_PATH for Prisma/tsx discovery.
 WORKDIR /opt/tools
 RUN printf '{"name":"nextcrm-tools","version":"0.0.0","private":true}\n' > package.json && \
     npm install --no-audit --no-fund \
+      sharp \
       prisma@7.6.0 \
       @prisma/client@7.6.0 \
       @prisma/adapter-pg@7.6.0 \
@@ -121,12 +122,14 @@ RUN printf '%s\n' \
     > /app/prisma.config.ts && \
     chown nextjs:nodejs /app/prisma.config.ts
 
-# Merge /opt/tools packages into /app/node_modules for ESM resolution.
-# ESM ignores NODE_PATH, so packages like @prisma/adapter-pg must exist
-# as real directories. The `-n` flag prevents overwriting pnpm symlinks.
-RUN mkdir -p /app/node_modules/@prisma && \
+# Merge /opt/tools packages into /app/node_modules for ESM/native resolution.
+# ESM ignores NODE_PATH, so packages like @prisma/adapter-pg and sharp/@img must exist
+# as real directories with native .so libraries. The `-n` flag prevents overwriting.
+RUN mkdir -p /app/node_modules/@prisma /app/node_modules/@img /app/node_modules/sharp && \
     cp -rn /opt/tools/node_modules/@prisma/adapter-pg /app/node_modules/@prisma/ 2>/dev/null || true && \
     cp -rn /opt/tools/node_modules/pg-cloudflare /app/node_modules/ 2>/dev/null || true && \
+    cp -rn /opt/tools/node_modules/@img/* /app/node_modules/@img/ 2>/dev/null || true && \
+    cp -rn /opt/tools/node_modules/sharp/* /app/node_modules/sharp/ 2>/dev/null || true && \
     chown -R nextjs:nodejs /app /opt/tools
 
 USER nextjs
