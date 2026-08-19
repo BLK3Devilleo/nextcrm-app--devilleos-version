@@ -64,7 +64,7 @@ services:
       dockerfile: Dockerfile
     restart: unless-stopped
     ports:
-      - "3000:3000"
+      - "${HOST_PORT:-3030}:3000"
     environment:
       # Database — values come from the same env vars as the postgres
       # service above so a single override changes both sides.
