@@ -6,13 +6,21 @@ import { prismadb } from "@/lib/prisma";
 import { ac, admin, manager, user } from "@/lib/auth-permissions";
 import { newUserNotify } from "@/lib/new-user-notify";
 import resendHelper from "@/lib/resend";
+import sendEmail from "@/lib/sendmail";
 
 const isDemo = process.env.NEXT_PUBLIC_APP_URL === "https://demo.nextcrm.io";
 
 export const auth = betterAuth({
   database: prismaAdapter(prismadb, { provider: "postgresql" }),
   secret: process.env.BETTER_AUTH_SECRET,
-  baseURL: process.env.BETTER_AUTH_URL,
+  baseURL: process.env.BETTER_AUTH_URL || "https://ernakcrm.filocentraldemando.site",
+  trustedOrigins: [
+    process.env.BETTER_AUTH_URL || "",
+    process.env.NEXT_PUBLIC_APP_URL || "",
+    "https://ernakcrm.filocentraldemando.site",
+    "http://localhost:3000",
+    "http://localhost:3030",
+  ].filter(Boolean),
   advanced: {
     database: {
       generateId: "uuid",
@@ -56,10 +64,14 @@ export const auth = betterAuth({
   },
 
   socialProviders: {
-    google: {
-      clientId: process.env.GOOGLE_ID!,
-      clientSecret: process.env.GOOGLE_SECRET!,
-    },
+    ...(process.env.GOOGLE_ID && process.env.GOOGLE_SECRET
+      ? {
+          google: {
+            clientId: process.env.GOOGLE_ID,
+            clientSecret: process.env.GOOGLE_SECRET,
+          },
+        }
+      : {}),
   },
 
   emailAndPassword: {
@@ -70,9 +82,18 @@ export const auth = betterAuth({
     emailOTP({
       sendVerificationOTP: async ({ email, otp, type }) => {
         try {
+          if (process.env.EMAIL_HOST && process.env.EMAIL_USERNAME && process.env.EMAIL_PASSWORD) {
+            await sendEmail({
+              from: process.env.EMAIL_FROM || process.env.EMAIL_USERNAME,
+              to: email,
+              subject: `Your verification code: ${otp}`,
+              text: `Your one-time verification code is: ${otp}\n\nThis code expires in 5 minutes.\n\nIf you did not request this, please ignore this email.`,
+            });
+            return;
+          }
           const resend = await resendHelper();
           await resend.emails.send({
-            from: `${process.env.NEXT_PUBLIC_APP_NAME} <${process.env.EMAIL_FROM}>`,
+            from: `${process.env.NEXT_PUBLIC_APP_NAME || "NextCRM"} <${process.env.EMAIL_FROM || "onboarding@resend.dev"}>`,
             to: email,
             subject: `Your verification code: ${otp}`,
             text: `Your one-time verification code is: ${otp}\n\nThis code expires in 5 minutes.\n\nIf you did not request this, please ignore this email.`,

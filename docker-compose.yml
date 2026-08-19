@@ -76,8 +76,15 @@ services:
       DB_NAME: ${POSTGRES_DB:-nextcrm}
 
       # Auth
-      BETTER_AUTH_URL: http://localhost:3000
-      # BETTER_AUTH_SECRET is auto-generated if not set
+      BETTER_AUTH_URL: ${BETTER_AUTH_URL:-https://ernakcrm.filocentraldemando.site}
+      BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET:-}
+
+      # Email (SMTP / Google Workspace or Resend)
+      EMAIL_HOST: ${EMAIL_HOST:-}
+      EMAIL_PORT: ${EMAIL_PORT:-465}
+      EMAIL_USERNAME: ${EMAIL_USERNAME:-}
+      EMAIL_PASSWORD: ${EMAIL_PASSWORD:-}
+      EMAIL_FROM: ${EMAIL_FROM:-}
 
       # MinIO — values come from the same env vars as the minio service.
       NEXT_PUBLIC_MINIO_ENDPOINT: http://minio:9000
@@ -97,8 +104,8 @@ services:
       INNGEST_BASE_URL: http://inngest:8288
 
       # App
-      NEXT_PUBLIC_APP_NAME: NextCRM
-      NEXT_PUBLIC_APP_URL: http://localhost:3000
+      NEXT_PUBLIC_APP_NAME: ${NEXT_PUBLIC_APP_NAME:-NextCRM}
+      NEXT_PUBLIC_APP_URL: ${NEXT_PUBLIC_APP_URL:-https://ernakcrm.filocentraldemando.site}
 
       # Initial admin account (created on first run by the seed script).
       # IMPORTANT: set this to a real email you control. The app uses
