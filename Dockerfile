@@ -62,8 +62,8 @@ RUN pnpm prisma generate && pnpm next build
 # ============================================
 FROM node:22-alpine AS runner
 
-# Install system dependencies in a single layer
-RUN apk add --no-cache curl postgresql-client
+# Install system dependencies in a single layer (including vips/libc6-compat for sharp)
+RUN apk add --no-cache curl postgresql-client vips libc6-compat
 
 # Set environment early to consolidate layers
 ENV NODE_ENV=production \
