@@ -8,8 +8,8 @@ WORKDIR /app
 # Enable corepack and prepare pnpm in a single layer for better caching
 RUN corepack enable && corepack prepare pnpm@latest --activate
 
-# Copy lock files first (changes less frequently) for maximum cache efficiency
-COPY pnpm-lock.yaml package.json ./
+# Copy lock files and workspace config first for maximum cache efficiency
+COPY pnpm-lock.yaml package.json pnpm-workspace.yaml* .npmrc* ./
 
 # Install dependencies with frozen lockfile
 RUN pnpm install --frozen-lockfile
