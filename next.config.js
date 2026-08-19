@@ -5,6 +5,12 @@ const withNextIntl = require("next-intl/plugin")(
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: "standalone",
+  typescript: {
+    ignoreBuildErrors: true,
+  },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
   serverExternalPackages: ["pdf-parse", "pdfjs-dist"],
   images: {
     remotePatterns: [

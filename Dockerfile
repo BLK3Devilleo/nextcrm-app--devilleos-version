@@ -50,7 +50,9 @@ ENV DATABASE_URL="postgresql://placeholder:[REDACTED]@placeholder:5432/placehold
     EMAIL_ENCRYPTION_KEY="0000000000000000000000000000000000000000000000000000000000000000" \
     OPENAI_API_KEY="sk-placeholder-for-build" \
     RESEND_API_KEY="re_placeholder_for_build" \
-    SKIP_ENV_VALIDATION=1
+    SKIP_ENV_VALIDATION=1 \
+    NEXT_TELEMETRY_DISABLED=1 \
+    NODE_OPTIONS="--max-old-space-size=2048"
 
 # Run build steps in a single layer to reduce intermediate images
 RUN pnpm prisma generate && pnpm next build
