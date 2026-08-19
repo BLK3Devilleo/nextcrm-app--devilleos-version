@@ -128,19 +128,26 @@ export const auth = betterAuth({
 
   callbacks: {
     async onUserCreated(user: { id: string }) {
-      // Check if this is the first user — make them admin
+      const dbUser = await prismadb.users.findUnique({ where: { id: user.id } });
+      const adminEmail = process.env.ADMIN_EMAIL || process.env.TEST_USER_EMAIL || "ernakproyectos@gmail.com";
+
+      if (dbUser?.email && dbUser.email.toLowerCase() === adminEmail.toLowerCase()) {
+        await prismadb.users.update({
+          where: { id: user.id },
+          data: { role: "admin", userStatus: "ACTIVE" },
+        });
+        return;
+      }
+
       const count = await prismadb.users.count();
       if (count === 1) {
         await prismadb.users.update({
           where: { id: user.id },
           data: { role: "admin", userStatus: "ACTIVE" },
         });
-      } else if (!isDemo) {
+      } else if (!isDemo && dbUser) {
         // Notify admins about new pending user
-        const dbUser = await prismadb.users.findUnique({ where: { id: user.id } });
-        if (dbUser) {
-          await newUserNotify(dbUser);
-        }
+        await newUserNotify(dbUser);
       }
     },
   },

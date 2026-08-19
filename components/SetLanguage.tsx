@@ -55,6 +55,7 @@ export function SetLanguage({ userId }: Props) {
 
   const languages = [
     { label: t("english"), value: "en" },
+    { label: t("spanish"), value: "es" },
     { label: t("czech"), value: "cz" },
     { label: t("german"), value: "de" },
     { label: t("ukrainian"), value: "uk" },

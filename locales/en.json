@@ -49,7 +49,7 @@
     "cardTitle": "Create new account",
     "cardDescription": "Create account by login with",
     "label": "Language",
-    "locale": "{locale, select, de {German} en {English} cz {Czech} uk {Ukrainian} other {Unknown}}"
+    "locale": "{locale, select, es {Spanish} de {German} en {English} cz {Czech} uk {Ukrainian} other {Unknown}}"
   },
   "CrmModuleMenuComponent": {
     "menuTitle": "Sales"
@@ -75,6 +75,7 @@
   },
   "LanguageSelector": {
     "english": "English",
+    "spanish": "Spanish",
     "czech": "Czech",
     "german": "German",
     "ukrainian": "Ukrainian",
