@@ -1,25 +1,4 @@
 services:
-  # --- PostgreSQL Database (with pgvector extension for embeddings) ---
-  postgres:
-    image: pgvector/pgvector:pg17
-    restart: unless-stopped
-    environment:
-      POSTGRES_USER: ${POSTGRES_USER:-nextcrm}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
-      POSTGRES_DB: ${POSTGRES_DB:-nextcrm}
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    networks:
-      - nextcrm
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-nextcrm}"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
-    # Uncomment to expose Postgres to host:
-    # ports:
-    #   - "5432:5432"
-
   # --- MinIO Object Storage ---
   minio:
     image: minio/minio:latest
@@ -37,10 +16,6 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
-    # Uncomment to expose MinIO to host:
-    # ports:
-    #   - "9000:9000"
-    #   - "9001:9001"
 
   # --- Inngest Dev Server ---
   inngest:
@@ -49,13 +24,6 @@ services:
     command: inngest dev -u http://app:3000/api/inngest
     networks:
       - nextcrm
-    # No healthcheck: the inngest/inngest image ships no HTTP client
-    # (no curl/wget/nc), so any exec-based probe fails permanently. The app
-    # depends on this service with `service_started` instead — safe here
-    # because the dev server polls the app for functions, not the reverse.
-    # Uncomment to expose Inngest dashboard to host:
-    # ports:
-    #   - "8288:8288"
 
   # --- NextCRM Application ---
   app:
@@ -66,14 +34,13 @@ services:
     ports:
       - "${HOST_PORT:-3030}:3000"
     environment:
-      # Database — values come from the same env vars as the postgres
-      # service above so a single override changes both sides.
-      DATABASE_URL: postgresql://${POSTGRES_USER:-nextcrm}:${POSTGRES_PASSWORD:-changeme}@postgres:5432/${POSTGRES_DB:-nextcrm}
-      DB_HOST: postgres
-      DB_PORT: "5432"
-      DB_USER: ${POSTGRES_USER:-nextcrm}
-      DB_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
-      DB_NAME: ${POSTGRES_DB:-nextcrm}
+      # Supabase / External PostgreSQL Database
+      DATABASE_URL: ${DATABASE_URL}
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT:-5432}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME:-postgres}
 
       # Auth
       BETTER_AUTH_URL: ${BETTER_AUTH_URL:-https://ernakcrm.filocentraldemando.site}
@@ -107,20 +74,10 @@ services:
       NEXT_PUBLIC_APP_NAME: ${NEXT_PUBLIC_APP_NAME:-NextCRM}
       NEXT_PUBLIC_APP_URL: ${NEXT_PUBLIC_APP_URL:-https://ernakcrm.filocentraldemando.site}
 
-      # Initial admin account (created on first run by the seed script).
-      # IMPORTANT: set this to a real email you control. The app uses
-      # passwordless Email OTP, so the placeholder default cannot
-      # receive login codes. Override via .env on first start, then
-      # configure SMTP/Resend (RESEND_API_KEY) so OTP emails actually
-      # send. Without an email provider you can read the OTP from
-      # the database directly.
-      TEST_USER_EMAIL: ${ADMIN_EMAIL:-admin@example.com}
+      # Initial admin account
+      TEST_USER_EMAIL: ${ADMIN_EMAIL:-ernakproyectos@gmail.com}
 
-      # Placeholder values for optional external services.
-      # The app initializes these clients at module load time, so empty
-      # values cause crashes. Users override these via .env to enable
-      # the corresponding features. The app runs fine with placeholders;
-      # individual features just won't work until real keys are provided.
+      # External APIs
       OPENAI_API_KEY: ${OPENAI_API_KEY:-sk-placeholder-replace-to-enable-ai}
       RESEND_API_KEY: ${RESEND_API_KEY:-re_placeholder_replace_to_enable_email}
       GOOGLE_ID: ${GOOGLE_ID:-}
@@ -128,8 +85,6 @@ services:
       FIRECRAWL_API_KEY: ${FIRECRAWL_API_KEY:-}
       E2B_API_KEY: ${E2B_API_KEY:-}
     depends_on:
-      postgres:
-        condition: service_healthy
       minio:
         condition: service_healthy
       inngest:
@@ -144,7 +99,6 @@ services:
       start_period: 30s
 
 volumes:
-  postgres_data:
   minio_data:
 
 networks:
